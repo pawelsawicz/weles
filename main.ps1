@@ -3,10 +3,16 @@ function CheckChocolatey(){
   return $exitCode.Contains("Chocolatey");
 }
 
-function DownloadPrograms(){
-  $listOfPrograms = iex "((new-object net.webclient).DownloadString('https://gist.githubusercontent.com/pawelsawicz/5bc621534add80d48262/raw/27b0f910475f4f8c2cfaac72d62738ade198a08e/my-list-program.txt'))"
+function DownloadProgramsFromInternet($urlToFile){
+  $listOfPrograms = iex ("((new-object net.webclient).DownloadString('{0}'))" -f $urlToFile)
   $programs = $listOfPrograms.Split("`r`n")
   return $programs;
+}
+
+function DownloadProgramsFromFile(){
+ $content = iex "Get-Content fakeProvisioning.txt"
+ $programs = $content.Split("`r`n")
+ return $programs;
 }
 
 function DownloadProgramsFake(){
@@ -19,16 +25,24 @@ function ExcludeExistingPackages(){
   $packagesRemote = DownloadProgramsFake
 }
 
-function Main(){
-
+function Main($arguments){
 Write-Output "My development provisioning"
 Write-Output "This script, will install & restore your development program";
 
-$chocolateyCommand = "((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))";
+$programsToInstall;
+
+if([string]::IsNullOrEmpty($arguments[0])){
+  Write-Output "Read form local file..."
+  $programsToInstall = DownloadProgramsFromFile;
+}
+else{
+  Write-Output "Read from internet file..."
+  $programsToInstall = DownloadProgramsFromInternet($arguments[0]);
+}
 
 if(CheckChocolatey){
   Write-Output "Chocolatey installed, now installing your apps";
-  foreach($program in DownloadProgramsFake){
+  foreach($program in $programsToInstall){
     Write-Output ("Installing {0}" -f $program);
     $result = (iex ("choco install {0} -y -v" -f $program))
     if(!$result -eq 0){
@@ -46,4 +60,4 @@ else{
   }
 }
 
-Main
+Main($args)
