@@ -25,10 +25,16 @@ function ExcludeExistingPackages(){
   $packagesRemote = DownloadProgramsFake
 }
 
+function UpdateAllPackages(){
+  $existingPackages = iex "choco list --local-only";
+  $cleanedUp = $existingPackages.Split("`r`n, ``");
+}
+
 function Main($arguments){
 
-Write-Output "My development provisioning"
+Write-Output "===WELES==="
 Write-Output "This script, will install & restore your development program";
+
 $chocolateyCommand = "((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))";
 $programsToInstall;
 
