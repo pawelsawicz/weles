@@ -1,0 +1,4 @@
+{
+  "name" : "my-laptop-config-1",
+  "programs" : ["git", "ilspy", "chrome", "poshgit"]
+}
