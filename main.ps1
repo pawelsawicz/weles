@@ -63,7 +63,7 @@ if(CheckChocolatey){
 else{
   Write-Output "You don't have installed Chocolatey, it will install itself"
   iex $chocolateyCommand
-  Main
+  Main($arguments)
   }
 }
 
