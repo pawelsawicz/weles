@@ -1,16 +1,17 @@
-# My development chocolatey reciepe
+# Weles
 
 ## What is it for ?
-It's simple powershell script, depndecy free! That manage and automate installing your packages,
-so you can even keep it somewhere in cloud. All you need to have is Powershell.
+It's simple powershell script, dependency free! That manage and automate installing your packages,
+so you can even keep your configuraton somewhere on the internet or locally.
+All you need to have is Powershell.
 
-## How can I provide it ?
-Simply you can provide link to any txt file or read from same location as this
+## How can I provide my config ?
+Simply you can provide link to any txt file or read config file from same location as this
 script.
 
 ## How should my file looks like ?
-Right now simply list all your programs each in a new line. Possibly in the
-future we going to develop some json-like format to support more bespoke
+Right now it's just simply list of all your programs each program in a new line.
+Possibly in the future we going to develop some json-like format to support more bespoke
 provisioning of your enviroment.  
 
 
@@ -20,4 +21,4 @@ provisioning of your enviroment.
 3. Does diff on what is actually installed and source from internet
 4. Create a website that gets list of programs from chocolatey.com, and simple chooser
 that will allow you to choose programs to install.
-5. 
+5.
