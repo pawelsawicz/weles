@@ -20,14 +20,37 @@ function DownloadProgramsFake(){
   return $programsToInstall;
 }
 
-function ExcludeExistingPackages(){
+function GetExistingPackages(){
   $existingPackages = iex "choco list --local-only"
-  $packagesRemote = DownloadProgramsFake
+  $matches_found = @()
+  foreach ($item in $existingPackages)
+  {
+      if ($item -match '^([^\s]*)'){
+        $matches_found += $matches[0]
+      }
+  }
+  return $matches_found
+}
+
+function ExcludeExistingPackages($listOfPrograms){
+  return @('aaaa','bbbb')
 }
 
 function UpdateAllPackages(){
   $existingPackages = iex "choco list --local-only";
   $cleanedUp = $existingPackages.Split("`r`n, ``");
+}
+
+function InstallPackage($program){
+  Write-Output ("Installing {0}" -f $program);
+  iex ("choco install {0} -y -v" -f $program);
+  $lastExit = $LASTEXITCODE;
+  if($lastExit -eq 0){
+    Write-Output "Package was installed succesfully";
+  }
+  else{
+    Write-Output "Exit code was not 0, couldn't install package!";
+  }
 }
 
 function Main($arguments){
@@ -36,33 +59,27 @@ Write-Output "===WELES==="
 Write-Output "This script, will install & restore your development program";
 
 $chocolateyCommand = "((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))";
-$programsToInstall;
+$downloadedPrograms;
 
 if([string]::IsNullOrEmpty($arguments[0])){
   Write-Output "Read form local file..."
-  $programsToInstall = DownloadProgramsFromFile;
+  $downloadedPrograms = DownloadProgramsFromFile;
 }
 else{
   Write-Output "Read from internet file..."
-  $programsToInstall = DownloadProgramsFromInternet($arguments[0]);
+  $downloadedPrograms = DownloadProgramsFromInternet($arguments[0]);
 }
 
 if(CheckChocolatey){
   Write-Output "Chocolatey installed, now installing your apps";
+  $programsToInstall = ExcludeExistingPackages($downloadedPrograms)
   foreach($program in $programsToInstall){
-    Write-Output ("Installing {0}" -f $program);
-    $result = (iex ("choco install {0} -y -v" -f $program))
-    if(!$result -eq 0){
-      Write-Output "Exit code was not 0";
-    }
-    else{
-      Write-Output "Package was installed succesfully";
-    }
+    InstallPackage($program);
   }
 }
 else{
-  Write-Output "You don't have installed Chocolatey, it will install itself"
-  iex $chocolateyCommand
+  Write-Output "You don't have installed Chocolatey, it will install itself";
+  iex ($chocolateyCommand)
   Main($arguments)
   }
 }
