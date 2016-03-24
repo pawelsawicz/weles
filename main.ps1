@@ -72,7 +72,7 @@ else{
 
 if(CheckChocolatey){
   Write-Output "Chocolatey installed, now installing your apps";
-  $programsToInstall = ExcludeExistingPackages($downloadedPrograms)
+  $programsToInstall = $downloadedPrograms #ExcludeExistingPackages($downloadedPrograms)
   foreach($program in $programsToInstall){
     InstallPackage($program);
   }
