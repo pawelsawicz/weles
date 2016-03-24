@@ -16,9 +16,10 @@ provisioning of your enviroment.
 
 
 #TODO :
-1. Install should output message of chocolatey
+1. ~~Install should output message of chocolatey~~
 2. Updating all packages
 3. Does diff on what is actually installed and source from internet
 4. Create a website that gets list of programs from chocolatey.com, and simple chooser
 that will allow you to choose programs to install.
-5.
+5. Create landing package
+6. Make sure that when Chocolatey is not installed, install itself
