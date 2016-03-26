@@ -53,34 +53,46 @@ function InstallPackage($program){
   }
 }
 
-function Main($arguments){
-
-Write-Output "===WELES==="
-Write-Output "This script, will install & restore your development program";
-
-$chocolateyCommand = ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
-$downloadedPrograms;
-
-if([string]::IsNullOrEmpty($arguments[0])){
-  Write-Output "Read form local file..."
-  $downloadedPrograms = DownloadProgramsFromFile;
-}
-else{
-  Write-Output "Read from internet file..."
-  $downloadedPrograms = DownloadProgramsFromInternet($arguments[0]);
-}
-
-if(CheckChocolatey){
+function InstallCommand($arguments){
+  $downloadedPrograms;
+  if([string]::IsNullOrEmpty($arguments[1])){
+    Write-Output "Read form local file..."
+    $downloadedPrograms = DownloadProgramsFromFile;
+  }
+  else{
+    Write-Output "Read from internet file..."
+    $downloadedPrograms = DownloadProgramsFromInternet($arguments[1]);
+  }
   Write-Output "Chocolatey installed, now installing your apps";
   $programsToInstall = $downloadedPrograms #ExcludeExistingPackages($downloadedPrograms)
   foreach($program in $programsToInstall){
     InstallPackage($program);
   }
 }
-else{
+
+function RunCommand($arguments){
+  switch($arguments[0]){
+    "install" {InstallCommand($arguments)}
+    "check" {"Command not implemented yet"}
+    "remote" {"Command not implemented yet"}
+  }
+}
+
+function Main($arguments){
+
+Write-Output "===WELES==="
+Write-Output "This script, will install & restore your development program";
+
+$chocolateyCommand = ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+$checkChocolatey = CheckChocolatey
+
+if(-Not $checkChocolatey){
   Write-Output "You don't have installed Chocolatey, it will install itself";
   iex $chocolateyCommand
   Main($arguments)
+}
+else{
+  RunCommand($arguments)
   }
 }
 
