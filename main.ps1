@@ -58,7 +58,7 @@ function Main($arguments){
 Write-Output "===WELES==="
 Write-Output "This script, will install & restore your development program";
 
-$chocolateyCommand = "((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))";
+$chocolateyCommand = ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 $downloadedPrograms;
 
 if([string]::IsNullOrEmpty($arguments[0])){
@@ -79,7 +79,7 @@ if(CheckChocolatey){
 }
 else{
   Write-Output "You don't have installed Chocolatey, it will install itself";
-  iex ($chocolateyCommand)
+  iex $chocolateyCommand
   Main($arguments)
   }
 }

@@ -22,4 +22,4 @@ provisioning of your enviroment.
 4. Create a website that gets list of programs from chocolatey.com, and simple chooser
 that will allow you to choose programs to install.
 5. Create landing package
-6. Make sure that when Chocolatey is not installed, install itself
+6. ~~Make sure that when Chocolatey is not installed, install itself~~
