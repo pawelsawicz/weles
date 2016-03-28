@@ -61,6 +61,17 @@ function UpgradeAllCommand(){
   }
 }
 
+function AddWelesToProfile(){
+  $profileContent = Get-Content $PROFILE
+  if(-Not $profileContent.Contains("Set-Alias weles '~\repos\weles-provisioning\main.ps1'")){
+    Write-Output "Add weles to profile"
+    Add-Content $PROFILE "Set-Alias weles '~\repos\weles-provisioning\main.ps1'";
+  }
+  else{
+    Write-Output "Weles already exist in profile"
+  }
+}
+
 function InstallCommand($arguments){
   $downloadedPrograms;
   if([string]::IsNullOrEmpty($arguments[1])){
@@ -95,6 +106,8 @@ Write-Output "This script, will install & restore your development program";
 
 $chocolateyCommand = ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 $checkChocolatey = CheckChocolatey
+
+AddWelesToProfile
 
 if(-Not $checkChocolatey){
   Write-Output "You don't have installed Chocolatey, it will install itself";
