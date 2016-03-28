@@ -29,16 +29,16 @@ function GetExistingPackages(){
         $matches_found += $matches[0]
       }
   }
-  return $matches_found
+  $cleanedUp = @()
+  For ($i = 0; $i -lt $matches_found.Count - 1; ++$i)
+  {
+      $cleanedUp += $matches_found[$i]
+  }
+  return $cleanedUp
 }
 
 function ExcludeExistingPackages($listOfPrograms){
   return @('aaaa','bbbb')
-}
-
-function UpdateAllPackages(){
-  $existingPackages = iex "choco list --local-only";
-  $cleanedUp = $existingPackages.Split("`r`n, ``");
 }
 
 function InstallPackage($program){
@@ -50,6 +50,14 @@ function InstallPackage($program){
   }
   else{
     Write-Output "Exit code was not 0, couldn't install package!";
+  }
+}
+
+function UpgradeAllCommand(){
+  Foreach ($package in GetExistingPackages)
+  {
+    Write-Output ("Upgrading {0}" -f $package);
+    iex ("choco upgrade {0} -y -v" -f $package);
   }
 }
 
@@ -75,6 +83,8 @@ function RunCommand($arguments){
     "install" {InstallCommand($arguments)}
     "check" {"Command not implemented yet"}
     "remote" {"Command not implemented yet"}
+    "upgrade" {UpgradeAllCommand}
+    default {"Unknown command, type -help to get an overview"}
   }
 }
 
